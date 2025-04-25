@@ -55,11 +55,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(Long id) {
         Optional<Event> event = this.eventRepository.findById(id);
-        if (event.isPresent()) {
+        if (Boolean.FALSE.equals(event.isPresent())) {
+            throw new BusinessException("Evento id:" +id+" não encontrado",404);
+        } else{
             return event.get();
         }
-        return this.eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Evento com ID " + id + " não encontrado."));
     }
 
     @Override
