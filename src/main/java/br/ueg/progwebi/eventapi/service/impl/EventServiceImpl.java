@@ -36,20 +36,19 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event update(Event event) {
-        if(Strings.isEmpty(event.getNome()) ||
-                Objects.isNull(event.getId()) || event.getId() <= 0) {
+        if(Strings.isEmpty(event.getNome()) || Objects.isNull(event.getId())) {
             throw new RuntimeException("Dados incompletos");
         }
         return eventRepository.save(event);
     }
 
     @Override
-    public Event getById(int id) {
+    public Event getById(Long id) {
         return null;
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Long id) {
 
     }
 
