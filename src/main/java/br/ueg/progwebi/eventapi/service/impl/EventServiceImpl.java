@@ -25,22 +25,30 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event create(Event event) {
-        if(Strings.isEmpty(event.getNome())) {
-            throw new RuntimeException("Nome não pode ser nulo");
-        }
-        Optional validarId = eventRepository.findById(event.getId());
-        if(validarId.isPresent()) {
-            throw new RuntimeException("Id já existe.");
-        }
+        validations(event);
         return eventRepository.save(event);
     }
 
-    @Override
-    public Event update(Event event) {
-        if(Strings.isEmpty(event.getNome()) || Objects.isNull(event.getId())) {
-            throw new RuntimeException("Dados incompletos");
+    private void validations(Event event) {
+        if(Strings.isEmpty(event.getNome())){
+            throw new BusinessException("Name não pode ser nulo ou vazio");
         }
-        return eventRepository.save(event);
+        // Criar validação
+    }
+
+    @Override
+    public Event update(Long id, Event event) {
+        Event eventToUpdate = this.getById(id);
+        if (Strings.isEmpty(event.getNome()) || event.getId().longValue() == 0) {
+            throw new BusinessException(("Dados incompletos"));
+        }
+        eventToUpdate.setNome(event.getNome());
+        eventToUpdate.setDescricao(event.getDescricao());
+        eventToUpdate.setDataInicio(event.getDataInicio());
+        eventToUpdate.setDataFim(event.getDataFim());
+        eventToUpdate.setGratuito(event.getGratuito());
+        eventToUpdate.getLocal();
+        return eventRepository.save(eventToUpdate);
     }
 
     @Override
