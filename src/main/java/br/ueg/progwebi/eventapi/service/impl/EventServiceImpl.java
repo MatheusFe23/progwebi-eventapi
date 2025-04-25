@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -30,6 +31,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event update(Event event) {
+        if(Strings.isEmpty(event.getNome()) ||
+                Objects.isNull(event.getId()) || event.getId() <= 0) {
+            throw new RuntimeException("Dados incompletos");
+        }
+        Optional validarId = eventRepository.findById(event.getId());
+        if(validarId.isPresent()) {
+            throw new RuntimeException("Id já existe.");
+        }
+        return eventRepository.save(event);
+    }
+
+    @Override
     public Event getById(int id) {
         return null;
     }
@@ -39,12 +53,5 @@ public class EventServiceImpl implements EventService {
 
     }
 
-    @Override
-    public Event update(Event event) {
-        if(Strings.isEmpty(event.getNome()) ||
-        Objects.isNull(event.getId()) || event.getId() <= 0) {
-            throw new RuntimeException("Dados incompletos");
-        }
-        return eventRepository.save(event);
-    }
+
 }

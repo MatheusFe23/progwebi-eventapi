@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.SEQUENCE;
+//import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Getter
@@ -19,15 +19,15 @@ public class Event {
     public static final String SEQUENCE_NAME = "EVENT_ID_GENERATE";
     @Id
     @Column(name = "identificador")
-    @SequenceGenerator(
-            name = SEQUENCE_NAME,
-            sequenceName = SEQUENCE_NAME + "_bd",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = SEQUENCE,
-            generator = SEQUENCE_NAME
-    )
+//    @SequenceGenerator(
+//            name = SEQUENCE_NAME,
+//            sequenceName = SEQUENCE_NAME + "_bd",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = SEQUENCE,
+//            generator = SEQUENCE_NAME
+//    )
     private Long id;
 
     @Column(name = "Nome", length = 50, nullable = false)
