@@ -64,12 +64,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event delete(Long id) {
-        Optional<Event> event = this.eventRepository.findById(id);
-        if (Boolean.FALSE.equals(event.isPresent())) {
-            throw new BusinessException("Evento Id: "+id+"não encontrado");
-        }
-        eventRepository.delete(event.get());
-        return event.get();
+      Event event = this.getById(id);
+      try{
+          this.eventRepository.delete(event);
+      } catch(DataIntegrityViolationException e){
+          throw new BusinessException("Event id:" +id+"não pode ser removido,"+"por questões de integredidade");
+      }
+      return event;
     }
 
 
