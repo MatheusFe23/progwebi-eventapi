@@ -6,12 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class EventoDTO {
+public class EventDTO {
     private Long id;
     private String nome;
     private String descricao;
     private LocalDate dataInicio;
-    private LocalTime dataFim;
+    private LocalDate dataFim;
     private boolean gratuito;
     private String local;
 

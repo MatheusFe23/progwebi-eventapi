@@ -1,12 +1,14 @@
 package br.ueg.progwebi.eventapi.controller;
 
 
-import br.ueg.progwebi.eventapi.controller.exceptions.ResourceNotFoundException;
+import br.ueg.progwebi.eventapi.controller.exceptions.ResourceNotFound;
+import br.ueg.progwebi.eventapi.dto.EventDTO;
 import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.service.EventService;
 import br.ueg.progwebi.eventapi.service.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -27,8 +29,21 @@ public class EventController {
     }
 
     @PostMapping
-    public Event createEvent(@RequestBody Event event) {
-        return eventService.create(event);
+    public ResponseEntity<Event> createEvent(@RequestBody EventDTO event) {
+        Event newEvent = eventDtoToModel(event);
+        return ResponseEntity.ok(eventService.create(newEvent));
+    }
+
+    private static Event eventDtoToModel(EventDTO event) {
+        Event newEvent = Event.builder()
+                .nome(event.getNome())
+                .descricao(event.getDescricao())
+                .dataInicio(event.getDataInicio())
+                .dataFim(event.getDataFim())
+                .local(event.getLocal())
+                .gratuito(event.isGratuito())
+                .build();
+        return newEvent;
     }
 
     @PostMapping(path = "/{id}")
@@ -54,7 +69,7 @@ public class EventController {
         try{
             event = this.eventService.delete(id);
         }catch(BusinessException e){
-            throw new ResourceNotFoundException(e.getMessage());
+            throw new ResourceNotFound(e.getMessage());
         }
         return event;
     }
