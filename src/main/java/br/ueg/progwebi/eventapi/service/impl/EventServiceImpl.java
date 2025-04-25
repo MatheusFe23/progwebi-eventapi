@@ -6,6 +6,7 @@ import br.ueg.progwebi.eventapi.service.EventService;
 import br.ueg.progwebi.eventapi.service.exceptions.BusinessException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,21 +55,24 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(Long id) {
         Optional<Event> event = this.eventRepository.findById(id);
-        if (event.isPresent()) {
+        if (Boolean.FALSE.equals(event.isPresent())) {
+            throw new BusinessException("Evento id:" +id+" não encontrado",404);
+        } else{
             return event.get();
         }
 
-        return null;
     }
 
     @Override
     public Event delete(Long id) {
-        Optional<Event> event = this.eventRepository.findById(id);
-        if (Boolean.FALSE.equals(event.isPresent())) {
-            throw new BusinessException("Evento Id: "+id+"não encontrado");
-        }
-        eventRepository.delete(event.get());
-        return event.get();
+      Event event = this.getById(id);
+
+      try{
+          this.eventRepository.delete(event);
+      } catch(DataIntegrityViolationException e){
+          throw new BusinessException("Event id:" +id+"não pode ser removido,"+"por questões de integredidade");
+      }
+      return event;
     }
 
 
