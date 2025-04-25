@@ -14,6 +14,4 @@ public class EventDTO {
     private LocalDate dataFim;
     private boolean gratuito;
     private String local;
-
-
 }

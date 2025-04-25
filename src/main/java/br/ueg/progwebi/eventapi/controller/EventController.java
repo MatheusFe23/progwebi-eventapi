@@ -54,12 +54,24 @@ public class EventController {
 
     @GetMapping(path = "/{id}")
     public Event getById(@PathVariable Long id) {
-            return this.eventService.getById(id);
+        Event event = this.eventService.getById(id);
+        if(Objects.isNull(event)) {
+            throw new HttpClientErrorException(
+                    HttpStatusCode.valueOf(404),
+                    "Evento não localizado");
+        }
+            return event;
     }
 
     @DeleteMapping(path = "/{id}")
     public Event delete(@PathVariable Long id) {
-        return this.eventService.delete(id);
+        Event event;
+        try{
+            event = this.eventService.delete(id);
+        }catch(BusinessException e){
+            throw new ResourceNotFound(e.getMessage());
+        }
+        return event;
     }
 
 

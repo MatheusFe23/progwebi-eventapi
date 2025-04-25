@@ -1,12 +1,12 @@
 package br.ueg.progwebi.eventapi.service.impl;
 
+import br.ueg.progwebi.eventapi.controller.exceptions.ResourceNotFound;
 import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.repository.EventRepository;
 import br.ueg.progwebi.eventapi.service.EventService;
 import br.ueg.progwebi.eventapi.service.exceptions.BusinessException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event update(Long id, Event event) {
         Event eventToUpdate = this.getById(id);
-        if (Strings.isEmpty(event.getNome()) || event.getId().longValue() == 0) {
+        if (Strings.isEmpty(event.getNome())) {
             throw new BusinessException(("Dados incompletos"));
         }
         eventToUpdate.setNome(event.getNome());
@@ -48,31 +48,28 @@ public class EventServiceImpl implements EventService {
         eventToUpdate.setDataInicio(event.getDataInicio());
         eventToUpdate.setDataFim(event.getDataFim());
         eventToUpdate.setGratuito(event.getGratuito());
-        eventToUpdate.getLocal();
+        eventToUpdate.setLocal(event.getLocal());
         return eventRepository.save(eventToUpdate);
     }
 
     @Override
     public Event getById(Long id) {
         Optional<Event> event = this.eventRepository.findById(id);
-        if (Boolean.FALSE.equals(event.isPresent())) {
-            throw new BusinessException("Evento id:" +id+" não encontrado",404);
-        } else{
+        if (event.isPresent()) {
             return event.get();
         }
-
+        return this.eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Evento com ID " + id + " não encontrado."));
     }
 
     @Override
     public Event delete(Long id) {
-      Event event = this.getById(id);
-
-      try{
-          this.eventRepository.delete(event);
-      } catch(DataIntegrityViolationException e){
-          throw new BusinessException("Event id:" +id+"não pode ser removido,"+"por questões de integredidade");
-      }
-      return event;
+        Optional<Event> event = this.eventRepository.findById(id);
+        if (Boolean.FALSE.equals(event.isPresent())) {
+            throw new BusinessException("Evento Id: "+id+"não encontrado");
+        }
+        eventRepository.delete(event.get());
+        return event.get();
     }
 
 
