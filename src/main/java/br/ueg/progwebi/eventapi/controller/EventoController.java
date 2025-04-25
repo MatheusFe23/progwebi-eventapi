@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path  = "/event")
 public class EventoController {
-    public String listAll(){
-        Evento evento = new Evento();
-        return evento.toString();
+    @GetMapping
+    public List<Evento> eventos() {
+        return null;
     }
 
 }
