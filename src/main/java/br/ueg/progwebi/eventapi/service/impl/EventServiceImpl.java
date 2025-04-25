@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class EventServiceImpl implements EventService {
 
@@ -39,6 +41,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event update(Event event) {
-        return null;
+        if(Strings.isEmpty(event.getNome()) ||
+        Objects.isNull(event.getId()) || event.getId() <= 0) {
+            throw new RuntimeException("Dados incompletos");
+        }
+        return eventRepository.save(event);
     }
 }

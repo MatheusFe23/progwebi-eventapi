@@ -25,6 +25,12 @@ public class EventController {
         return eventService.create(event);
     }
 
+    @PostMapping(path = "/{id}")
+    public Event updateEvent(@PathVariable Long id, @RequestBody Event event) {
+        event.setId(id);
+        return eventService.update(event);
+    }
+
 
 
 
