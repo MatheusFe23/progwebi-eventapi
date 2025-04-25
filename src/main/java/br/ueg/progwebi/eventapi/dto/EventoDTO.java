@@ -1,4 +1,4 @@
-package br.ueg.progwebi.eventapi.model.dtos;
+package br.ueg.progwebi.eventapi.dto;
 
 import lombok.Data;
 
