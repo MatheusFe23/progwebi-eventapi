@@ -3,6 +3,7 @@ package br.ueg.progwebi.eventapi.service.impl;
 import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.repository.EventRepository;
 import br.ueg.progwebi.eventapi.service.EventService;
+import br.ueg.progwebi.eventapi.service.exceptions.BusinessException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void delete(Long id) {
-
+    public Event delete(Long id) {
+        Optional<Event> event = this.eventRepository.findById(id);
+        if (Boolean.FALSE.equals(event.isPresent())) {
+            throw new BusinessException("Evento Id: "+id+"não encontrado");
+        }
+        eventRepository.delete(event.get());
+        return event.get();
     }
 
 

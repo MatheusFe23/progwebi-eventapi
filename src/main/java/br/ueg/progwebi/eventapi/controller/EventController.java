@@ -1,8 +1,10 @@
 package br.ueg.progwebi.eventapi.controller;
 
 
+import br.ueg.progwebi.eventapi.controller.exceptions.ResourceNotFoundException;
 import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.service.EventService;
+import br.ueg.progwebi.eventapi.service.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path  = "/event")
@@ -45,7 +48,16 @@ public class EventController {
             return event;
     }
 
-
+    @DeleteMapping(path = "/{id}")
+    public Event delete(@PathVariable Long id) {
+        Event event;
+        try{
+            event = this.eventService.delete(id);
+        }catch(BusinessException e){
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+        return event;
+    }
 
 
 
