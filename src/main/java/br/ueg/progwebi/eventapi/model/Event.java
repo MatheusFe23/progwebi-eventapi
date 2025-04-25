@@ -15,7 +15,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Evento {
+public class Event {
     public static final String SEQUENCE_NAME = "EVENT_ID_GENERATE";
     @Id
     @Column(name = "identificador")

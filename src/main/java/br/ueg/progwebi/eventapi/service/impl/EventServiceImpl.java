@@ -1,8 +1,9 @@
 package br.ueg.progwebi.eventapi.service.impl;
 
-import br.ueg.progwebi.eventapi.model.Evento;
+import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.repository.EventRepository;
 import br.ueg.progwebi.eventapi.service.EventService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,20 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
 
     @Override
-    public List<Evento> listAll() {
+    public List<Event> listAll() {
         return eventRepository.findAll();
     }
 
     @Override
-    public Evento create(Evento evento) {
-        return null;
+    public Event create(Event event) {
+        if(Strings.isEmpty(event.getNome())) {
+            throw new RuntimeException("Nome não pode ser nulo");
+        }
+        return eventRepository.save(event);
     }
 
     @Override
-    public Evento getById(int id) {
+    public Event getById(int id) {
         return null;
     }
 
@@ -34,7 +38,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Evento update(Evento evento) {
+    public Event update(Event event) {
         return null;
     }
 }
