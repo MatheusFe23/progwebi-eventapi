@@ -47,9 +47,9 @@ public class EventController {
     }
 
     @PostMapping(path = "/{id}")
-    public Event updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        event.setId(id);
-        return eventService.update(event);
+    public Event updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDto) {
+        Event eventUpdated = eventDtoToModel(eventDto);
+        return eventService.update(id, eventUpdated);
     }
 
     @GetMapping(path = "/{id}")
