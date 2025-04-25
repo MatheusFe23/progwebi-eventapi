@@ -4,9 +4,12 @@ package br.ueg.progwebi.eventapi.controller;
 import br.ueg.progwebi.eventapi.model.Event;
 import br.ueg.progwebi.eventapi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path  = "/event")
@@ -31,6 +34,16 @@ public class EventController {
         return eventService.update(event);
     }
 
+    @GetMapping(path = "/{id}")
+    public Event getById(@PathVariable Long id) {
+        Event event = this.eventService.getById(id);
+        if(Objects.isNull(event)) {
+            throw new HttpClientErrorException(
+                    HttpStatusCode.valueOf(404),
+                    "Evento não localizado");
+        }
+            return event;
+    }
 
 
 

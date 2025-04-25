@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 //import static jakarta.persistence.GenerationType.SEQUENCE;
 
-//Teste
+
 @Getter
 @Setter
 @ToString
