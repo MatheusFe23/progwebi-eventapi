@@ -27,6 +27,10 @@ public class EventServiceImpl implements EventService {
         if(Strings.isEmpty(event.getNome())) {
             throw new RuntimeException("Nome não pode ser nulo");
         }
+        Optional validarId = eventRepository.findById(event.getId());
+        if(validarId.isPresent()) {
+            throw new RuntimeException("Id já existe.");
+        }
         return eventRepository.save(event);
     }
 
@@ -35,10 +39,6 @@ public class EventServiceImpl implements EventService {
         if(Strings.isEmpty(event.getNome()) ||
                 Objects.isNull(event.getId()) || event.getId() <= 0) {
             throw new RuntimeException("Dados incompletos");
-        }
-        Optional validarId = eventRepository.findById(event.getId());
-        if(validarId.isPresent()) {
-            throw new RuntimeException("Id já existe.");
         }
         return eventRepository.save(event);
     }
