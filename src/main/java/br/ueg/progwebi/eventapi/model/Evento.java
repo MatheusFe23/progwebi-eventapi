@@ -12,9 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-
 public class Evento {
+
 
     private Long id;
     private String nome;
