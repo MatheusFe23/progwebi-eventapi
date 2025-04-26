@@ -27,6 +27,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event create(Event event) {
         validations(event);
+        validationsDate(event);
         return eventRepository.save(event);
     }
 
@@ -36,10 +37,16 @@ public class EventServiceImpl implements EventService {
         }
         // Criar validação
     }
+    private void validationsDate(Event event) {
+     if(event.getDataInicio().isBefore(LocalDate.now())){
+        throw new BusinessException("A data não pode ser antes da data atual");
+       }
+    }
 
     @Override
     public Event update(Long id, Event event) {
         Event eventToUpdate = this.getById(id);
+        validationsDate(event);
         if (Strings.isEmpty(event.getNome())) {
             throw new BusinessException(("Dados incompletos"));
         }
